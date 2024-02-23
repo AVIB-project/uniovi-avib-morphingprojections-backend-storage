@@ -1,0 +1,45 @@
+server:
+  port: 8083
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+minio:
+  endpoint: localhost
+  minioPort: 9000
+  secure:  true
+  access-key: gl8rbGORHSpxmg1V
+  secret-key: 8WphDMckYqRb29s43SzA4trsV2GgaQRc
+  
+organization:
+  host: localhost
+  port: 8082
+    
+---
+server:
+  port: 8083
+  
+management:
+  endpoint:
+    health:     
+      probes:
+        enabled: true
+
+minio:
+  endpoint: uniovi-hl
+  minioPort: 9000
+  secure:  true
+  access-key: BLBZSkLGtFD63XmP
+  secret-key: vY8jARXmV7tsp7HSmtuBPjzBy8BWG57s
+    
+organization:
+  host: localhost
+  port: 8082
+              
+spring:
+  config:
+    activate:
+      on-profile: avib      
