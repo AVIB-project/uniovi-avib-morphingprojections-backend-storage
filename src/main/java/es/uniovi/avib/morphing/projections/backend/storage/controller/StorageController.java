@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.UploadFileResponse;
-import es.uniovi.avib.morphing.projections.backend.storage.service.ResourceService;
+import es.uniovi.avib.morphing.projections.backend.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("resources")
-public class ResourceController {
-	private final ResourceService resourceService;
+public class StorageController {
+	private final StorageService resourceService;
 	    
     @RequestMapping(method = { RequestMethod.POST }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json", value = "/organizations/{organizationId}/projects/{projectId}/cases/{caseId}")
     public ResponseEntity<List<UploadFileResponse>> uploadFiles(
