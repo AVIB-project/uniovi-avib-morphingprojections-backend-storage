@@ -49,7 +49,8 @@ public class StorageService {
             minioClient.putObject(
             		PutObjectArgs.builder()
                     	.bucket(organizationId)
-                        .object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, file.getSize(), -1)
+                        //.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, file.getSize(), -1)
+                    	.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, is.available(), -1)
                         .contentType(file.getContentType())
                         .build());	
         } catch (Exception e) {

@@ -6,7 +6,7 @@ management:
     health:
       probes:
         enabled: true
-
+      
 minio:
   endpoint: localhost
   minioPort: 9000
@@ -17,7 +17,13 @@ minio:
 organization:
   host: localhost
   port: 8082
-    
+
+spring:   
+  servlet:    
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+                
 ---
 server:
   port: 8083
@@ -42,4 +48,9 @@ organization:
 spring:
   config:
     activate:
-      on-profile: avib      
+      on-profile: avib
+      
+  servlet:    
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
