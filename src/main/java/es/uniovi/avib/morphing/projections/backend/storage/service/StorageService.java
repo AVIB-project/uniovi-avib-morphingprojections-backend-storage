@@ -45,14 +45,16 @@ public class StorageService {
     public void uploadFiles(String organizationId, String projectId, String caseId, MultipartFile file) {
     	log.debug("uploadFiles: upload file with name: {}", file.getOriginalFilename().toString());
     		
-        try (InputStream is = file.getInputStream()) {        	
+        try (InputStream is = file.getInputStream()) {
+        	/*if (file.getOriginalFilename().equals("trees.csv"))
+        		throw new Exception("My error");*/
+        	
             minioClient.putObject(
             		PutObjectArgs.builder()
                     	.bucket(organizationId)
-                        //.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, file.getSize(), -1)
                     	.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, is.available(), -1)
                         .contentType(file.getContentType())
-                        .build());	
+                        .build());				
         } catch (Exception e) {
             throw new RuntimeException("Failed to store files.", e);                       
         }
