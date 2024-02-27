@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import es.uniovi.avib.morphing.projections.backend.storage.configuration.OrganizationConfig;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.ResourceDto;
+
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -41,18 +42,20 @@ public class StorageService {
            throw new RuntimeException(e.getMessage());
        }
     }
-	
+		
     public void uploadFiles(String organizationId, String projectId, String caseId, MultipartFile file) {
     	log.debug("uploadFiles: upload file with name: {}", file.getOriginalFilename().toString());
     		
         try (InputStream is = file.getInputStream()) {
-        	/*if (file.getOriginalFilename().equals("trees.csv"))
-        		throw new Exception("My error");*/
-        	
+        	//set bucket and object name to persisted
+        	String bucket = organizationId;
+        	String object = projectId + "/" + caseId + "/" + file.getOriginalFilename();
+        	        
+        	// persist object file
             minioClient.putObject(
             		PutObjectArgs.builder()
-                    	.bucket(organizationId)
-                    	.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, is.available(), -1)
+                    	.bucket(bucket)
+                    	.object(object).stream(is, is.available(), -1)
                         .contentType(file.getContentType())
                         .build());				
         } catch (Exception e) {
@@ -74,16 +77,17 @@ public class StorageService {
     	List<DownloadFileResponse> downloadFilesResponse = new ArrayList<DownloadFileResponse>();    	
         try {
         	for (ResourceDto resource : resources) {
-        		String[] parts = resource.getFile().split("/");
+        		String[] parts = resource.getBucket().split("/");
         				
         		String bucket = parts[0];
-        		String file = parts[1] + "/" + parts[2] + "/" + parts[3];
+        		String file = parts[1] + "/" + parts[2] + "/" + resource.getFile();
         		
 				InputStream stream = minioClient.getObject(
 						  GetObjectArgs.builder()
 						  	.bucket(bucket)
 						  	.object(file)
 						  	.build());
+				// A debug function
 				byte[] buffer = stream.readAllBytes();
 				File targetFile = new File("/home/miguel/temp/resources/test/" + parts[3]);
 				OutputStream outStream = new FileOutputStream(targetFile);

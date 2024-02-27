@@ -25,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("resources")
+//@RequestMapping("resources")
+@RequestMapping("storage")
 public class StorageController {
 	private final StorageService resourceService;
 	    
