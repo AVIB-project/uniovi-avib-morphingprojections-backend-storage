@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("resources")
 @RequestMapping("storage")
 public class StorageController {
 	private final StorageService resourceService;
@@ -73,5 +72,23 @@ public class StorageController {
     	}
     	
     	return new ResponseEntity<List<DownloadFileResponse>>(downloadFilesResponse, HttpStatus.OK);
-    }    
+    }
+    
+    @RequestMapping(method = { RequestMethod.DELETE }, produces = "application/json", value = "/organizations/{organizationId}/projects/{projectId}/cases/{caseId}/file/{file}")
+    public ResponseEntity<Boolean> deleteFile(
+    		@PathVariable String organizationId,
+    		@PathVariable String projectId,
+    		@PathVariable String caseId,
+    		@PathVariable String file) {
+    	
+    	Boolean result = true;
+    	try {
+    		log.debug("downloadFiles: download files from caseId: {}", caseId);
+    		
+    		result = resourceService.deleteFile(organizationId, projectId, caseId, file);
+    	} catch (Exception e) {    	
+    	}
+    	
+    	return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+    }
 }

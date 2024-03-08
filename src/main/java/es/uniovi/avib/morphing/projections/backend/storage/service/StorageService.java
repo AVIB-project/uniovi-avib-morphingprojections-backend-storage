@@ -22,6 +22,7 @@ import es.uniovi.avib.morphing.projections.backend.storage.dto.ResourceDto;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.messages.Bucket;
 
 import lombok.RequiredArgsConstructor;
@@ -99,4 +100,23 @@ public class StorageService {
         
         return downloadFilesResponse;
     }    
+    
+    public boolean deleteFile(String organizationId, String projectId, String caseId, String file) {
+    	try {
+        	//set bucket and object name to persisted
+        	String bucket = organizationId;
+        	String object = projectId + "/" + caseId + "/" + file;
+        	
+        	// persist object file
+            minioClient.removeObject(
+            		RemoveObjectArgs.builder()
+                    	.bucket(bucket)
+                    	.object(object)
+                        .build());	
+    	} catch (Exception e) {
+            throw new RuntimeException("Failed to delete file.", e);                       
+        }
+    	
+    	return true;
+    }
 }
