@@ -12,6 +12,8 @@ ENV SPRING_PROFILES_ACTIVE=$ARG_SPRING_PROFILES_ACTIVE
 
 # cp target/{jarfileName}.jar /opt/app/app.jar
 COPY ${JAR_FILE} app.jar
+
+EXPOSE 8083
  
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
