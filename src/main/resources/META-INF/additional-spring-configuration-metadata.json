@@ -1,37 +1,37 @@
 {"properties": [
   {
-    "name": "minio.endpoint",
+    "name": "minio.host",
     "type": "java.lang.String",
-    "description": "A description for 'minio.endpoint'"
+    "description": "Minio host"
+  },  
+  {
+    "name": "minio.port",
+    "type": "java.lang.String",
+    "description": "Minio port"
   },
   {
-    "name": "minio.minioPort",
+    "name": "minio.disable-tls",
     "type": "java.lang.String",
-    "description": "A description for 'minio.minioPort'"
-  },
-  {
-    "name": "minio.secure",
-    "type": "java.lang.String",
-    "description": "A description for 'minio.secure'"
+    "description": "Minio disable TLS"
   },
   {
     "name": "minio.access-key",
     "type": "java.lang.String",
-    "description": "A description for 'minio.access-key'"
+    "description": "Minio access key"
   },
   {
     "name": "minio.secret-key",
     "type": "java.lang.String",
-    "description": "A description for 'minio.secret-key'"
+    "description": "Minio secret key"
   },
   {
     "name": "organization.host",
     "type": "java.lang.String",
-    "description": "A description for 'organization.host'"
+    "description": "Organization microservice host"
   },
   {
     "name": "organization.port",
     "type": "java.lang.String",
-    "description": "A description for 'organization.port'"
+    "description": "Organization microservice port"
   }
 ]}

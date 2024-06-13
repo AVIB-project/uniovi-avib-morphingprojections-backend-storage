@@ -20,6 +20,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<minio-version>8.5.2</minio-version>
+		<software.amazon.awssdk>2.25.47</software.amazon.awssdk>
 	</properties>
 	
 	<dependencies>
@@ -40,7 +41,26 @@
 		    <artifactId>minio</artifactId>
 		     <version>${minio-version}</version>
 		</dependency>
-        
+		<dependency>
+		    <groupId>software.amazon.awssdk</groupId>
+		    <artifactId>s3</artifactId>
+		    <version>${software.amazon.awssdk}</version>    	
+		</dependency>
+		<dependency>
+		    <groupId>software.amazon.awssdk</groupId>
+		    <artifactId>aws-crt-client</artifactId>
+		    <version>${software.amazon.awssdk}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.opencsv</groupId>
+		    <artifactId>opencsv</artifactId>
+		    <version>5.3</version>
+		</dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        		        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

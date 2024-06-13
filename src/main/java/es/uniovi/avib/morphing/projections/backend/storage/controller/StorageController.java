@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("storage")
 public class StorageController {
-	private final StorageService resourceService;
+	private final StorageService storageService;
 	    
     @RequestMapping(method = { RequestMethod.POST }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json", value = "/organizations/{organizationId}/projects/{projectId}/cases/{caseId}")
     public ResponseEntity<List<UploadFileResponse>> uploadFiles(
@@ -41,7 +41,7 @@ public class StorageController {
             try {
 		    	log.debug("uploadFiles: upload file with name: {}", file.getOriginalFilename().toString());
 		    	
-		    	resourceService.uploadFiles(organizationId, projectId, caseId, file);
+		    	storageService.uploadFiles(organizationId, projectId, caseId, file);
 		    	
 		    	uploadFilesResponse.add(UploadFileResponse.builder()
 		    			.name(file.getOriginalFilename())
@@ -67,7 +67,7 @@ public class StorageController {
     	try {
     		log.debug("downloadFiles: download files from caseId: {}", caseId);
     		
-    		downloadFilesResponse = resourceService.downloadFiles(caseId);
+    		downloadFilesResponse = storageService.downloadFiles(caseId);
     	} catch (Exception e) {    	
     	}
     	
@@ -85,7 +85,7 @@ public class StorageController {
     	try {
     		log.debug("downloadFiles: download files from caseId: {}", caseId);
     		
-    		result = resourceService.deleteFile(organizationId, projectId, caseId, file);
+    		result = storageService.deleteFile(organizationId, projectId, caseId, file);
     	} catch (Exception e) {    	
     	}
     	

@@ -8,9 +8,9 @@ management:
         enabled: true
       
 minio:
-  endpoint: localhost
-  minioPort: 9000
-  secure:  true
+  host: localhost
+  port: 9000
+  disable-tls: true
   access-key: gl8rbGORHSpxmg1V
   secret-key: 8WphDMckYqRb29s43SzA4trsV2GgaQRc
   
@@ -23,7 +23,7 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-                
+
 ---
 server:
   port: 8083
@@ -35,9 +35,40 @@ management:
         enabled: true
 
 minio:
-  endpoint: uniovi-hl
-  minioPort: 9000
-  secure:  true
+  host: localhost
+  port: 9000
+  disable-tls: true
+  access-key: admin
+  secret-key: password
+    
+organization:
+  host: localhost
+  port: 8082
+              
+spring:
+  config:
+    activate:
+      on-profile: native
+      
+  servlet:    
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+---
+server:
+  port: 8083
+  
+management:
+  endpoint:
+    health:     
+      probes:
+        enabled: true
+
+minio:
+  host: uniovi-hl
+  port: 9000
+  disable-tls: true
   access-key: BLBZSkLGtFD63XmP
   secret-key: vY8jARXmV7tsp7HSmtuBPjzBy8BWG57s
     
