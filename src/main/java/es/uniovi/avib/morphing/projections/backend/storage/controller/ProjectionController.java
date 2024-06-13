@@ -21,7 +21,7 @@ import es.uniovi.avib.morphing.projections.backend.storage.service.ProjectionSer
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("projection")
+@RequestMapping("projections")
 public class ProjectionController {
 	private final ProjectionService projectionService;
 			

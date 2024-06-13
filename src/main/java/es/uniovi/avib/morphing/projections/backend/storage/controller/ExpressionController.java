@@ -23,11 +23,11 @@ import es.uniovi.avib.morphing.projections.backend.storage.service.ExpressionSer
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("expression")
+@RequestMapping("expressions")
 public class ExpressionController {
 	private final ExpressionService annotationService;
 			
-	@RequestMapping(value = "/annotations", method = { RequestMethod.GET }, produces = "application/json")
+	@RequestMapping(value = "/annotation", method = { RequestMethod.POST }, produces = "application/json")
 	public ResponseEntity<Object> findAllExpressionsByAnnotation(@RequestBody ExpressionRequestDto expressionRequestDto) {
 		List<Expression> expressions = new ArrayList<>();
 		
