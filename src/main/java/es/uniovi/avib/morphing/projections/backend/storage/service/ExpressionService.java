@@ -1,6 +1,7 @@
 package es.uniovi.avib.morphing.projections.backend.storage.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import es.uniovi.avib.morphing.projections.backend.storage.dto.ExpressionRequestDto;
+import es.uniovi.avib.morphing.projections.backend.storage.dto.ProjectionRequestDto;
 import es.uniovi.avib.morphing.projections.backend.storage.domain.Expression;
 
 @Slf4j
@@ -108,6 +110,30 @@ public class ExpressionService {
         return request;
     }
     
+	private SelectObjectContentRequest generateBaseCSVAnnotationsNameRequest(String bucket, String key, String query) {
+        InputSerialization inputSerialization;        
+
+        inputSerialization = InputSerialization.builder()
+        		.csv(CSVInput.builder().fileHeaderInfo(FileHeaderInfo.NONE).build())
+	        	.compressionType(CompressionType.NONE)
+	    .build();
+        
+        OutputSerialization outputSerialization = OutputSerialization.builder()
+        		.csv(CSVOutput.builder().build())
+        		.build();      
+        
+        SelectObjectContentRequest request = SelectObjectContentRequest.builder()
+	    	.bucket(bucket)
+	    	.key(key)
+	    	.expression(query)
+	    	.expressionType(ExpressionType.SQL)
+	    	.inputSerialization(inputSerialization)
+	    	.outputSerialization(outputSerialization)
+	    .build();
+        
+        return request;
+    }
+	
     private SelectObjectContentResponseHandler buildResponseHandler(EventStreamInfo eventStreamInfo) {
         // Use a Visitor to process the response stream. This visitor logs information and gathers details while processing.
         final SelectObjectContentResponseHandler.Visitor visitor = SelectObjectContentResponseHandler.Visitor.builder()
@@ -163,7 +189,40 @@ public class ExpressionService {
         
         return models;
     }
-           
+         
+	public List<String> findAnnotationsName(ProjectionRequestDto projectionRequestDto) throws Exception {
+		log.debug("findAnnotationsName: found annoations names");
+				
+        List<String> annotations = null;
+        
+        // prepare S3 Select Request
+		String query = "select s.* from s3object s limit 1";
+		
+        SelectObjectContentRequest select = generateBaseCSVAnnotationsNameRequest(
+        		projectionRequestDto.getBucketName(), 
+        		projectionRequestDto.getKeyObjectName(),
+        		query);
+                                
+        EventStreamInfo eventStreamInfo = new EventStreamInfo();
+
+        // execute S3 Select Request
+        s3AsyncClient
+        	.selectObjectContent(select, buildResponseHandler(eventStreamInfo))
+        	.join();
+        
+        // get S3 Select Request reponse and parse
+        for(String s : eventStreamInfo.getRecords()) {
+        	String[] columns = s.split(",");
+        	
+        	annotations = new ArrayList<>(Arrays.asList(columns));
+        	
+        	// remove the first annotation called (sample_id or attribute_id)
+        	annotations.remove(0);
+        }
+                        
+		return annotations;			
+	}
+	
 	public List<Expression> findAllExpressionsByAnnotation(ExpressionRequestDto expressionRequestDto) throws Exception {
 		log.debug("findAllExpressionsByAnnotation: found expressions from annotation Id: {}", expressionRequestDto.getAnnotationId());
 				 				
@@ -201,5 +260,5 @@ public class ExpressionService {
         expressions = convertToExpression(resultInputStream, Expression.class);
         
 		return expressions;			
-	}
+	}	
 }

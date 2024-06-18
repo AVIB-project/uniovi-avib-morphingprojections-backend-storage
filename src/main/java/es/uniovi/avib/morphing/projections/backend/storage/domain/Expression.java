@@ -11,5 +11,5 @@ public class Expression {
 	@CsvBindByPosition(position = 0,required = true)
     private String sampleId;
 	@CsvBindByPosition(position = 1,required = true)
-    private float expression;
+    private float value;
 }

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import es.uniovi.avib.morphing.projections.backend.storage.domain.Expression;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.ExpressionRequestDto;
+import es.uniovi.avib.morphing.projections.backend.storage.dto.ProjectionRequestDto;
 import es.uniovi.avib.morphing.projections.backend.storage.service.ExpressionService;
 
 @Slf4j
@@ -26,8 +27,29 @@ import es.uniovi.avib.morphing.projections.backend.storage.service.ExpressionSer
 @RequestMapping("expressions")
 public class ExpressionController {
 	private final ExpressionService annotationService;
+		
+	@RequestMapping(value = "/annotations/name", method = { RequestMethod.POST }, produces = "application/json")
+	public ResponseEntity<Object> findAllExpressionsByAnnotation(@RequestBody ProjectionRequestDto projectionRequestDto) {
+		List<String> expressions = new ArrayList<>();
+		
+		try {
+			expressions = annotationService.findAnnotationsName(projectionRequestDto);
 			
-	@RequestMapping(value = "/annotation", method = { RequestMethod.POST }, produces = "application/json")
+			log.debug("findAllExpressionsByAnnotation: found {} expressions", expressions.size());
+			
+			return ResponseEntity
+		            .status(HttpStatus.OK)
+		            .body(expressions);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			return ResponseEntity
+		            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+		            .body(e.getMessage());
+		}			
+	}
+	
+	@RequestMapping(value = "/annotations/value", method = { RequestMethod.POST }, produces = "application/json")
 	public ResponseEntity<Object> findAllExpressionsByAnnotation(@RequestBody ExpressionRequestDto expressionRequestDto) {
 		List<Expression> expressions = new ArrayList<>();
 		
@@ -46,5 +68,5 @@ public class ExpressionController {
 		            .status(HttpStatus.INTERNAL_SERVER_ERROR)
 		            .body(e.getMessage());
 		}			
-	}	
+	}		
 }
