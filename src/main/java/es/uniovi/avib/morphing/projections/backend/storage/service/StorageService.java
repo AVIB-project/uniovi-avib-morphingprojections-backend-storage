@@ -18,8 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import es.uniovi.avib.morphing.projections.backend.storage.configuration.OrganizationConfig;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.ResourceDto;
-
+import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
+import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
@@ -44,23 +45,34 @@ public class StorageService {
        }
     }
 		
-    public void uploadFiles(String organizationId, String projectId, String caseId, MultipartFile file) {
+    public void uploadFiles(String organizationId, String projectId, String caseId, MultipartFile file) throws Exception {
     	log.debug("uploadFiles: upload file with name: {}", file.getOriginalFilename().toString());
     		
-        try (InputStream is = file.getInputStream()) {
-        	//set bucket and object name to persisted
-        	String bucket = organizationId;
-        	String object = projectId + "/" + caseId + "/" + file.getOriginalFilename();
-        	        
+    	try {
+    		// check if exist bucket if not created one
+    		if (!minioClient.bucketExists(
+    				BucketExistsArgs.builder()
+                		.bucket(organizationId)                	
+                		.build())) {    		
+			        minioClient.makeBucket(
+			        		MakeBucketArgs.builder()
+			                	.bucket(organizationId)                	
+			                    .build());
+    		}
+    	} catch (Exception error) {
+    		throw error;                        
+        }
+    	
+        try (InputStream is = file.getInputStream()) {        	   
         	// persist object file
             minioClient.putObject(
             		PutObjectArgs.builder()
-                    	.bucket(bucket)
-                    	.object(object).stream(is, is.available(), -1)
+                    	.bucket(organizationId)
+                    	.object(projectId + "/" + caseId + "/" + file.getOriginalFilename()).stream(is, is.available(), -1)
                         .contentType(file.getContentType())
                         .build());				
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to store files.", e);                       
+        } catch (Exception error) {
+            throw error;                       
         }
     }
     
