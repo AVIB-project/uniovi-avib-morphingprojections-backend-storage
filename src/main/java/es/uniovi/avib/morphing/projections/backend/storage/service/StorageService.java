@@ -2,6 +2,7 @@ package es.uniovi.avib.morphing.projections.backend.storage.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.uniovi.avib.morphing.projections.backend.storage.configuration.OrganizationConfig;
-import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
-import es.uniovi.avib.morphing.projections.backend.storage.dto.ResourceDto;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
@@ -28,6 +26,10 @@ import io.minio.messages.Bucket;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import es.uniovi.avib.morphing.projections.backend.storage.configuration.OrganizationConfig;
+import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
+import es.uniovi.avib.morphing.projections.backend.storage.dto.ResourceDto;
 
 @Slf4j
 @Service
@@ -77,7 +79,7 @@ public class StorageService {
     }
     
     @SuppressWarnings("resource")
-	public List<DownloadFileResponse> downloadFiles(String caseId) {
+	public List<DownloadFileResponse> downloadFilesbyCaseId(String caseId) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 				
@@ -112,6 +114,22 @@ public class StorageService {
         
         return downloadFilesResponse;
     }    
+    
+ 	public byte[] downloadFileByFilename(String organizationId, String projectId, String caseId, String filename) throws IOException {
+	 	String file = projectId + "/" + caseId + "/" + filename;
+	 	
+        try {        	 
+				InputStream inputStream = minioClient.getObject(
+						  GetObjectArgs.builder()
+						  	.bucket(organizationId)
+						  	.object(file)
+						  .build());
+			    	
+				return inputStream.readAllBytes();				
+        } catch (Exception ex) {
+             throw new RuntimeException("Failed to download file.", ex);                       
+        }
+     } 
     
     public boolean deleteFile(String organizationId, String projectId, String caseId, String file) {
     	try {

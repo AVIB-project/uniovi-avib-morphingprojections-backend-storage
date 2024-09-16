@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import es.uniovi.avib.morphing.projections.backend.storage.dto.DownloadFileResponse;
 import es.uniovi.avib.morphing.projections.backend.storage.dto.UploadFileResponse;
 import es.uniovi.avib.morphing.projections.backend.storage.service.StorageService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @CrossOrigin(maxAge = 3600)
@@ -60,18 +62,35 @@ public class StorageController {
     }
     
     @RequestMapping(method = { RequestMethod.GET }, produces = "application/json", value = "/cases/{caseId}")
-    public ResponseEntity<List<DownloadFileResponse>> downloadFiles(
-    		@PathVariable String caseId) {
+    public ResponseEntity<List<DownloadFileResponse>> downloadFilesbyCase(@PathVariable String caseId) {
     	
     	List<DownloadFileResponse> downloadFilesResponse = null;
     	try {
     		log.debug("downloadFiles: download files from caseId: {}", caseId);
     		
-    		downloadFilesResponse = storageService.downloadFiles(caseId);
-    	} catch (Exception e) {    	
+    		downloadFilesResponse = storageService.downloadFilesbyCaseId(caseId);
+    	} catch (Exception ex) {  
+    		throw ex;
     	}
     	
     	return new ResponseEntity<List<DownloadFileResponse>>(downloadFilesResponse, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = { RequestMethod.GET }, produces = "text/csv; charset=utf-8", value = "/organizations/{organizationId}/projects/{projectId}/cases/{caseId}/file/{file}")
+    public ResponseEntity<byte[]> downloadFileByFilename(@PathVariable String organizationId, @PathVariable String projectId, @PathVariable String caseId, @PathVariable String file) throws Exception {		
+    	try {
+    		log.debug("downloadFilebyFilename: download file from filename: {}", file);
+    		
+    		byte[] fileBytes = storageService.downloadFileByFilename(organizationId, projectId, caseId, file);
+    		
+    		HttpHeaders headers = new HttpHeaders();
+    		headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file);
+    	    headers.set(HttpHeaders.CONTENT_TYPE, "text/csv");
+    	    
+    	    return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.OK);
+    	} catch (Exception ex) {  
+    		throw ex;
+    	}
     }
     
     @RequestMapping(method = { RequestMethod.DELETE }, produces = "application/json", value = "/organizations/{organizationId}/projects/{projectId}/cases/{caseId}/file/{file}")
@@ -86,7 +105,8 @@ public class StorageController {
     		log.debug("downloadFiles: download files from caseId: {}", caseId);
     		
     		result = storageService.deleteFile(organizationId, projectId, caseId, file);
-    	} catch (Exception e) {    	
+    	} catch (Exception ex) {
+    		throw ex;
     	}
     	
     	return new ResponseEntity<Boolean>(result, HttpStatus.OK);

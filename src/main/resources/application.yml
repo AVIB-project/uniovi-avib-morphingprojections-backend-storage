@@ -11,8 +11,8 @@ minio:
   host: localhost
   port: 9000
   disable-tls: true
-  access-key: gl8rbGORHSpxmg1V
-  secret-key: 8WphDMckYqRb29s43SzA4trsV2GgaQRc
+  access-key: WRc6I2ubSt9iZ0P6
+  secret-key: AOm7m0CaFaeO5RW74jhzYEvxB6A0FK4P
   
 organization:
   host: localhost
