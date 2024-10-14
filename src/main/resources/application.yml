@@ -6,17 +6,6 @@ management:
     health:
       probes:
         enabled: true
-      
-minio:
-  host: localhost
-  port: 9000
-  disable-tls: true
-  access-key: WRc6I2ubSt9iZ0P6
-  secret-key: AOm7m0CaFaeO5RW74jhzYEvxB6A0FK4P
-  
-organization:
-  host: localhost
-  port: 8082
 
 spring:   
   servlet:    
@@ -24,36 +13,16 @@ spring:
       max-file-size: 500MB
       max-request-size: 500MB
 
----
-server:
-  port: 8083
-  
-management:
-  endpoint:
-    health:     
-      probes:
-        enabled: true
-
 minio:
   host: localhost
   port: 9000
   disable-tls: true
-  access-key: admin
-  secret-key: password
-    
+  access-key: WRc6I2ubSt9iZ0P6
+  secret-key: AOm7m0CaFaeO5RW74jhzYEvxB6A0FK4P
+
 organization:
   host: localhost
   port: 8082
-              
-spring:
-  config:
-    activate:
-      on-profile: native
-      
-  servlet:    
-    multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
 
 ---
 server:
@@ -64,24 +33,24 @@ management:
     health:     
       probes:
         enabled: true
-
-minio:
-  host: uniovi-hl
-  port: 9000
-  disable-tls: true
-  access-key: BLBZSkLGtFD63XmP
-  secret-key: vY8jARXmV7tsp7HSmtuBPjzBy8BWG57s
-    
-organization:
-  host: localhost
-  port: 8082
               
 spring:
   config:
     activate:
       on-profile: avib
-      
+
   servlet:    
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+
+minio:
+  host: uniovi-hl
+  port: 9000
+  disable-tls: true
+  access-key: RS6P1ApnSrDf9MaS
+  secret-key: weQJEUUEVfNZV1Zs0MnA0e9CT2d71jSK
+
+organization:
+  host: uniovi-avib-morphingprojections-backend-organization
+  port: 8082

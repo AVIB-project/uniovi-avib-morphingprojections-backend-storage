@@ -1,37 +1,37 @@
 {"properties": [
   {
-    "name": "minio.host",
-    "type": "java.lang.String",
-    "description": "Minio host"
-  },  
-  {
-    "name": "minio.port",
-    "type": "java.lang.String",
-    "description": "Minio port"
-  },
-  {
-    "name": "minio.disable-tls",
-    "type": "java.lang.String",
-    "description": "Minio disable TLS"
-  },
-  {
-    "name": "minio.access-key",
-    "type": "java.lang.String",
-    "description": "Minio access key"
-  },
-  {
     "name": "minio.secret-key",
     "type": "java.lang.String",
-    "description": "Minio secret key"
+    "description": "A description for 'minio.secret-key'"
   },
   {
     "name": "organization.host",
     "type": "java.lang.String",
-    "description": "Organization microservice host"
+    "description": "A description for 'organization.host'"
   },
   {
     "name": "organization.port",
     "type": "java.lang.String",
-    "description": "Organization microservice port"
+    "description": "A description for 'organization.port'"
+  },
+  {
+    "name": "minio.host",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.host'"
+  },
+  {
+    "name": "minio.port",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.port'"
+  },
+  {
+    "name": "minio.disable-tls",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.disable-tls'"
+  },
+  {
+    "name": "minio.access-key",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.access-key'"
   }
 ]}
