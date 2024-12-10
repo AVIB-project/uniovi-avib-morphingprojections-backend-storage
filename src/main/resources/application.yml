@@ -10,8 +10,8 @@ management:
 spring:   
   servlet:    
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 3GB
+      max-request-size: 3GB
 
 minio:
   host: localhost
@@ -41,8 +41,8 @@ spring:
 
   servlet:    
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 3GB
+      max-request-size: 3GB
 
 minio:
   host: uniovi-hl

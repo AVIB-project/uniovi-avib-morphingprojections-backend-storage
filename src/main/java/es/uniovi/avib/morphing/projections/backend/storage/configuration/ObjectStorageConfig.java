@@ -11,9 +11,9 @@ public class ObjectStorageConfig {
     @Value("${minio.host}")
     private String host;
 
-    @Value("${minio.port}")
-    private int port;
-    //private int port=9000;
+    //@Value("${minio.port:9000}")
+    //private int port;
+    private int port=9000;
     
     @Value("${minio.disable-tls}")
     private boolean disableTls;
